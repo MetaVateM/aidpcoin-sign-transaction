@@ -1,4 +1,4 @@
-const { getRPC, methods } = require("@ravenrebels/ravencoin-rpc");
+const { getRPC, methods } = require("@metavatem/aidpcoin-rpc");
 const fs = require("fs");
 
 const full = require("./mock/full.json"); 

@@ -13,14 +13,14 @@ interface IUTXO {
 }
 
 export function sign(
-  network: "rvn" | "rvn-test" | "evr" | "evr-test",
+  network: "aidp" | "aidp-test" | "evr" | "evr-test",
   rawTransactionHex: string,
   UTXOs: Array<IUTXO>,
   privateKeys: any
 ): string {
   const networkMapper = {
-    rvn: chains.rvn.main,
-    "rvn-test": chains.rvn.test,
+    aidp: chains.aidp.main,
+    "aidp-test": chains.aidp.test,
     evr: chains.evr.main,
     "evr-test": chains.evr.test,
   };
@@ -29,19 +29,19 @@ export function sign(
 
   if (!coin) {
     throw new Error(
-      "Validation error, first argument network must be rvn, rvn-test, evr or evr-test"
+      "Validation error, first argument network must be aidp, aidp-test, evr or evr-test"
     );
   }
 
   //@ts-ignore
-  const RAVENCOIN = toBitcoinJS(coin);
+  const AIDPCOIN = toBitcoinJS(coin);
 
   const tx = bitcoin.Transaction.fromHex(rawTransactionHex);
-  const txb = bitcoin.TransactionBuilder.fromTransaction(tx, RAVENCOIN);
+  const txb = bitcoin.TransactionBuilder.fromTransaction(tx, AIDPCOIN);
 
   function getKeyPairByAddress(address) {
     const wif = privateKeys[address];
-    const keyPair = bitcoin.ECPair.fromWIF(wif, RAVENCOIN);
+    const keyPair = bitcoin.ECPair.fromWIF(wif, AIDPCOIN);
     return keyPair;
   }
 

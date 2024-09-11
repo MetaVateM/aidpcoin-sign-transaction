@@ -1,42 +1,49 @@
-import {Buffer as $hCgyA$Buffer} from "buffer";
-import {Transaction as $hCgyA$Transaction, TransactionBuilder as $hCgyA$TransactionBuilder, ECPair as $hCgyA$ECPair} from "bitcoinjs-lib";
-import {chains as $hCgyA$chains, toBitcoinJS as $hCgyA$toBitcoinJS} from "@hyperbitjs/chains";
+import {Buffer as $5n8iY$Buffer} from "buffer";
+import {chains as $5n8iY$chains, toBitcoinJS as $5n8iY$toBitcoinJS} from "@hyperbitjs/chains";
+import {Transaction as $5n8iY$Transaction, TransactionBuilder as $5n8iY$TransactionBuilder, ECPair as $5n8iY$ECPair} from "bitcoinjs-lib";
+
+var $c3f6c693698dc7cd$exports = {};
+
+var $c3f6c693698dc7cd$require$Buffer = $5n8iY$Buffer;
+"use strict";
+Object.defineProperty($c3f6c693698dc7cd$exports, "__esModule", {
+    value: true
+});
+$c3f6c693698dc7cd$exports["default"] = void 0;
+$c3f6c693698dc7cd$exports.sign = $c3f6c693698dc7cd$var$sign;
 
 
-
-var $c3f6c693698dc7cd$require$Buffer = $hCgyA$Buffer;
-
-function $c3f6c693698dc7cd$export$c5552dfdbc7cec71(network, rawTransactionHex, UTXOs, privateKeys) {
-    const networkMapper = {
-        rvn: (0, $hCgyA$chains).rvn.main,
-        "rvn-test": (0, $hCgyA$chains).rvn.test,
-        evr: (0, $hCgyA$chains).evr.main,
-        "evr-test": (0, $hCgyA$chains).evr.test
+function $c3f6c693698dc7cd$var$sign(network, rawTransactionHex, UTXOs, privateKeys) {
+    var networkMapper = {
+        aidp: $5n8iY$chains.aidp.main,
+        "aidp-test": $5n8iY$chains.aidp.test,
+        evr: $5n8iY$chains.evr.main,
+        "evr-test": $5n8iY$chains.evr.test
     };
-    const coin = networkMapper[network];
-    if (!coin) throw new Error("Validation error, first argument network must be rvn, rvn-test, evr or evr-test");
+    var coin = networkMapper[network];
+    if (!coin) throw new Error("Validation error, first argument network must be aidp, aidp-test, evr or evr-test");
     //@ts-ignore
-    const RAVENCOIN = (0, $hCgyA$toBitcoinJS)(coin);
-    const tx = $hCgyA$Transaction.fromHex(rawTransactionHex);
-    const txb = $hCgyA$TransactionBuilder.fromTransaction(tx, RAVENCOIN);
+    var AIDPCOIN = (0, $5n8iY$toBitcoinJS)(coin);
+    var tx = $5n8iY$Transaction.fromHex(rawTransactionHex);
+    var txb = $5n8iY$TransactionBuilder.fromTransaction(tx, AIDPCOIN);
     function getKeyPairByAddress(address) {
-        const wif = privateKeys[address];
-        const keyPair = $hCgyA$ECPair.fromWIF(wif, RAVENCOIN);
+        var wif = privateKeys[address];
+        var keyPair = $5n8iY$ECPair.fromWIF(wif, AIDPCOIN);
         return keyPair;
     }
     function getUTXO(transactionId, index) {
-        return UTXOs.find((utxo)=>{
+        return UTXOs.find(function(utxo) {
             return utxo.txid === transactionId && utxo.outputIndex === index;
         });
     }
-    for(let i = 0; i < tx.ins.length; i++){
-        const input = tx.ins[i];
-        const txId = $c3f6c693698dc7cd$require$Buffer.from(input.hash, "hex").reverse().toString("hex");
-        const utxo = getUTXO(txId, input.index);
+    for(var i = 0; i < tx.ins.length; i++){
+        var input = tx.ins[i];
+        var txId = $c3f6c693698dc7cd$require$Buffer.from(input.hash, "hex").reverse().toString("hex");
+        var utxo = getUTXO(txId, input.index);
         if (!utxo) throw Error("Could not find UTXO for input " + input);
-        const address = utxo.address;
-        const keyPair = getKeyPairByAddress(address);
-        const signParams = {
+        var address = utxo.address;
+        var keyPair = getKeyPairByAddress(address);
+        var signParams = {
             prevOutScriptType: "p2pkh",
             vin: i,
             keyPair: keyPair,
@@ -44,13 +51,13 @@ function $c3f6c693698dc7cd$export$c5552dfdbc7cec71(network, rawTransactionHex, U
         };
         txb.sign(signParams);
     }
-    const signedTxHex = txb.build().toHex();
+    var signedTxHex = txb.build().toHex();
     return signedTxHex;
 }
-var $c3f6c693698dc7cd$export$2e2bcd8739ae039 = {
-    sign: $c3f6c693698dc7cd$export$c5552dfdbc7cec71
+var $c3f6c693698dc7cd$var$_default = $c3f6c693698dc7cd$exports["default"] = {
+    sign: $c3f6c693698dc7cd$var$sign
 };
 
 
-export {$c3f6c693698dc7cd$export$c5552dfdbc7cec71 as sign, $c3f6c693698dc7cd$export$2e2bcd8739ae039 as default};
+export {$c3f6c693698dc7cd$exports as default};
 //# sourceMappingURL=index.mjs.map
